@@ -1,0 +1,57 @@
+{
+  "name": "pi-dtime",
+  "version": "0.1.0",
+  "description": "Pi extension that appends each completed agent response duration and local completion time to the transcript",
+  "type": "module",
+  "license": "MIT",
+  "author": "ssdiwu",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ssdiwu/pi-dtime.git"
+  },
+  "homepage": "https://github.com/ssdiwu/pi-dtime#readme",
+  "bugs": {
+    "url": "https://github.com/ssdiwu/pi-dtime/issues"
+  },
+  "keywords": [
+    "pi-package",
+    "pi-extension",
+    "pi-coding-agent",
+    "response-time",
+    "timing",
+    "transcript"
+  ],
+  "files": [
+    "index.ts",
+    "README.md",
+    "README-zh.md",
+    "AGENTS.md",
+    "CHANGELOG.md",
+    "doc",
+    "LICENSE"
+  ],
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "prepack": "npm run typecheck && npm test"
+  },
+  "pi": {
+    "extensions": [
+      "./index.ts"
+    ]
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "peerDependencies": {
+    "@earendil-works/pi-coding-agent": "*",
+    "@earendil-works/pi-tui": "*"
+  },
+  "devDependencies": {
+    "@earendil-works/pi-coding-agent": "^0.84.1",
+    "@earendil-works/pi-tui": "^0.84.1",
+    "@types/node": "^22.0.0",
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.0"
+  }
+}

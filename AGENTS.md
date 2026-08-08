@@ -8,8 +8,8 @@
 
 1. `README.md` 与 `README-zh.md`：英文、中文用户行为与安装入口，两者内容必须同步。
 2. `doc/README.md`：文档权威边界。
-3. `index.ts`：当前实现权威。
-4. `tests/README.md` 与 `tests/index.test.ts`：行为验证。
+3. `index.ts` 与 `src/locales.ts`：生命周期、可选 i18n 桥接、locale 数据与回退的当前实现权威。
+4. `tests/README.md`、`tests/index.test.ts` 与 `tests/locales.test.ts`：行为验证。
 5. `CHANGELOG.md`：用户可感知变化，不作为当前实现权威。
 
 ## 行为与安全边界
@@ -19,6 +19,8 @@
 - 只使用 `appendEntry` + `registerEntryRenderer` 显示结果；不得使用 `setStatus`、`setFooter`、`sendMessage` 或 `sendUserMessage`。
 - 持久化 `customType` 固定为 `response-timing`，用于兼容迁移前已经写入的会话记录。
 - 恢复的 custom entry 视为不可信输入：时间戳必须是有效安全整数，且 `durationMs === endedAt - startedAt`。
+- `pi-di18n` 是可选集成，不得成为运行时依赖；优先请求 `pi-core/i18n/requestApi`，保留 `pi-i18n/requestApi` 兼容事件，并在失败时默认简体中文。
+- renderer 每次渲染必须读取当前 locale，使历史 v1 记录可动态切换语言；25 locale 集合与 `pi-di18n/locales/*.json` 保持同步。
 - `session_shutdown` 只清理未完成计时，不追加伪完成记录。
 - 不读取项目级配置，不新增运行时依赖，不统计单个工具或 dteam worker。
 
@@ -32,12 +34,12 @@ npm test
 npm pack --dry-run
 ```
 
-涉及生命周期或渲染时，再用 `pi --no-extensions -e ./index.ts` 做隔离加载或真实会话验证。
+涉及生命周期、渲染或 i18n 时，再用 `pi --no-extensions -e ./index.ts` 做隔离加载，并与 `pi-di18n` 做联合真实会话验证。
 
 ## 代码工程纪律
 
 - 先核实现有实现、标准库、Pi 平台能力和已安装依赖，在第一个完整满足需求的层级停止。
-- 模块按真实职责和生命周期划分；当前单文件足够时不新增透传层。
+- 模块按真实职责和生命周期划分；计时生命周期留在根 `index.ts`，独立变化的 locale 数据留在 `src/locales.ts`，不新增透传层。
 - 替换可用路径时先验证候选，再切换加载源，避免双重扩展并存。
 - 只有公开契约或存量数据需要时保留兼容路径；`response-timing` 属于已有存量会话契约。
 - 测试优先走扩展公开注册接口，mock 只放在 Pi 边界。

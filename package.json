@@ -1,7 +1,7 @@
 {
   "name": "pi-dtime",
-  "version": "0.1.0",
-  "description": "Pi extension that appends each completed agent response duration and local completion time to the transcript",
+  "version": "0.2.0",
+  "description": "Pi extension that appends localized response duration and local completion time to the transcript",
   "type": "module",
   "license": "MIT",
   "author": "ssdiwu",
@@ -19,10 +19,13 @@
     "pi-coding-agent",
     "response-time",
     "timing",
+    "i18n",
+    "localization",
     "transcript"
   ],
   "files": [
     "index.ts",
+    "src",
     "README.md",
     "README-zh.md",
     "AGENTS.md",
